@@ -4,14 +4,14 @@ import 'package:hive_demo/models/person.dart';
 
 final peopleFormKey = GlobalKey<FormState>();
 
-class AddPeopleForm extends StatefulWidget {
-  const AddPeopleForm({Key? key}) : super(key: key);
+class AddPersonForm extends StatefulWidget {
+  const AddPersonForm({Key? key}) : super(key: key);
 
   @override
-  _AddPeopleFormState createState() => _AddPeopleFormState();
+  _AddPersonFormState createState() => _AddPersonFormState();
 }
 
-class _AddPeopleFormState extends State<AddPeopleForm> {
+class _AddPersonFormState extends State<AddPersonForm> {
   final _nameController = TextEditingController();
   final _countryController = TextEditingController();
   late final Box box;
