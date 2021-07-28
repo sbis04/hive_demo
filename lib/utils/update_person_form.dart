@@ -3,8 +3,6 @@ import 'package:hive/hive.dart';
 
 import 'package:hive_demo/models/person.dart';
 
-final peopleFormKey = GlobalKey<FormState>();
-
 class UpdatePersonForm extends StatefulWidget {
   final int index;
   final Person person;
@@ -19,6 +17,8 @@ class UpdatePersonForm extends StatefulWidget {
 }
 
 class _UpdatePersonFormState extends State<UpdatePersonForm> {
+  final _personFormKey = GlobalKey<FormState>();
+
   late final _nameController;
   late final _countryController;
   late final Box box;
@@ -54,7 +54,7 @@ class _UpdatePersonFormState extends State<UpdatePersonForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: peopleFormKey,
+      key: _personFormKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -77,7 +77,7 @@ class _UpdatePersonFormState extends State<UpdatePersonForm> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  if (peopleFormKey.currentState!.validate()) {
+                  if (_personFormKey.currentState!.validate()) {
                     _updateInfo();
                     Navigator.of(context).pop();
                   }

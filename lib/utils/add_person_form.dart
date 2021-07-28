@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_demo/models/person.dart';
 
-final peopleFormKey = GlobalKey<FormState>();
-
 class AddPersonForm extends StatefulWidget {
   const AddPersonForm({Key? key}) : super(key: key);
 
@@ -14,6 +12,8 @@ class AddPersonForm extends StatefulWidget {
 class _AddPersonFormState extends State<AddPersonForm> {
   final _nameController = TextEditingController();
   final _countryController = TextEditingController();
+  final _personFormKey = GlobalKey<FormState>();
+
   late final Box box;
 
   String? _fieldValidator(String? value) {
@@ -44,7 +44,7 @@ class _AddPersonFormState extends State<AddPersonForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: peopleFormKey,
+      key: _personFormKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -67,7 +67,7 @@ class _AddPersonFormState extends State<AddPersonForm> {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  if (peopleFormKey.currentState!.validate()) {
+                  if (_personFormKey.currentState!.validate()) {
                     _addInfo();
                     Navigator.of(context).pop();
                   }
