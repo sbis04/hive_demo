@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:hive_demo/screens/update_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_demo/screens/add_screen.dart';
 
 class InfoScreen extends StatefulWidget {
   @override
@@ -7,54 +10,36 @@ class InfoScreen extends StatefulWidget {
 }
 
 class _InfoScreenState extends State<InfoScreen> {
-  late final Box box;
+  late final Box contactBox;
 
-  // Add info to people box
-  _addInfo() async {
-    // Storing key-value pair
-    box.put('name', 'John');
-    box.put('country', 'Italy');
+  // // Get info from people box
+  // _getInfo() {
+  //   var name = box.get('name');
+  //   var country = box.get('country');
 
-    print('Info added to box!');
-  }
-
-  // Get info from people box
-  _getInfo() {
-    var name = box.get('name');
-    var country = box.get('country');
-
-    print('Info retrieved from box: $name ($country)');
-  }
-
-  // Update info of people box
-  _updateInfo() {
-    box.put('name', 'Mike');
-    box.put('country', 'United States');
-
-    print('Info updated in box!');
-  }
+  //   print('Info retrieved from box: $name ($country)');
+  // }
 
   // Delete info from people box
-  _deleteInfo() {
-    box.delete('name');
-    box.delete('country');
+  _deleteInfo(int index) {
+    contactBox.deleteAt(index);
 
-    print('Info deleted from box!');
+    print('Item deleted from box at index: $index');
   }
 
   @override
   void initState() {
     super.initState();
     // Get reference to an already opened box
-    box = Hive.box('peopleBox');
+    contactBox = Hive.box('peopleBox');
   }
 
-  @override
-  void dispose() {
-    // Closes all Hive boxes
-    Hive.close();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // Closes all Hive boxes
+  //   Hive.close();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -62,40 +47,54 @@ class _InfoScreenState extends State<InfoScreen> {
       appBar: AppBar(
         title: Text('People Info'),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _addInfo,
-      //   tooltip: 'Increment',
-      //   child: Icon(Icons.add),
-      // ),
-      body: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ElevatedButton(
-              onPressed: _addInfo,
-              child: Text('Add'),
-            ),
-            ElevatedButton(
-              onPressed: _getInfo,
-              child: Text('Get'),
-            ),
-            ElevatedButton(
-              onPressed: _updateInfo,
-              child: Text('Update'),
-            ),
-            ElevatedButton(
-              onPressed: _deleteInfo,
-              child: Text('Delete'),
-            ),
-          ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => AddScreen(),
+          ),
         ),
+        child: Icon(Icons.add),
       ),
-      // body: ListView.builder(
-      //   itemCount: 1,
-      //   itemBuilder: (context, index) {
-      //     return ListTile();
-      //   },
-      // ),
+      body: ValueListenableBuilder(
+        valueListenable: contactBox.listenable(),
+        builder: (context, Box box, widget) {
+          if (box.isEmpty) {
+            return Center(
+              child: Text('Empty'),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: box.length,
+              itemBuilder: (context, index) {
+                var currentBox = box;
+                var personData = currentBox.getAt(index)!;
+
+                return InkWell(
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => UpdateScreen(
+                        index: index,
+                        person: personData,
+                      ),
+                    ),
+                  ),
+                  child: ListTile(
+                    title: Text(personData.name),
+                    subtitle: Text(personData.country),
+                    trailing: IconButton(
+                      onPressed: () => _deleteInfo(index),
+                      icon: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        },
+      ),
     );
   }
 }
