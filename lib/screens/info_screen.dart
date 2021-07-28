@@ -12,14 +12,6 @@ class InfoScreen extends StatefulWidget {
 class _InfoScreenState extends State<InfoScreen> {
   late final Box contactBox;
 
-  // // Get info from people box
-  // _getInfo() {
-  //   var name = box.get('name');
-  //   var country = box.get('country');
-
-  //   print('Info retrieved from box: $name ($country)');
-  // }
-
   // Delete info from people box
   _deleteInfo(int index) {
     contactBox.deleteAt(index);
@@ -33,13 +25,6 @@ class _InfoScreenState extends State<InfoScreen> {
     // Get reference to an already opened box
     contactBox = Hive.box('peopleBox');
   }
-
-  // @override
-  // void dispose() {
-  //   // Closes all Hive boxes
-  //   Hive.close();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
