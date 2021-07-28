@@ -22,7 +22,7 @@ class _UpdateScreenState extends State<UpdateScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Add Info'),
+        title: Text('Update Info'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
